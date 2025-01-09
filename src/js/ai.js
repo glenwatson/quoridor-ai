@@ -533,10 +533,10 @@ class AI {
         const winRate = best.winRate;
         
         // heuristic:
-        // For initial phase of a game, AI get difficulty, so help AI.
-        // And if AI is loosing seriously, it get difficulty too.
-        // So, if it is initial phase of a game or estimated winRate is low enough,
-        // help AI to find shortest path pawn move.
+        // For the initial phase of a game, AI has difficulty choosing a move, so help AI.
+        // And if AI is seriously loosing, it has difficultly too.
+        // So, if it is initial phase of a game or if the estimated winRate is low enough,
+        // help AI to find the shortest path pawn move.
         if (((game.turn < 6 && game.pawnOfTurn.position.col === 4) || winRate < 0.1) && bestMove[0] !== null) {
             let rightMove = false;
             const nextPositions = AI.chooseShortestPathNextPawnPositionsThoroughly(game);
@@ -552,7 +552,7 @@ class AI {
                 bestMove = [[nextPosition.row, nextPosition.col], null, null];
             }
         }
-        // heuristic: common openings
+        // heuristic: common openings - top of board
         if (game.turn < 5 && game.pawnOfNotTurn.position.col === 4 && game.pawnOfNotTurn.position.row === 6 && Math.random() < 0.5) {
             const bestMoves = [
                 [null, [5, 3], null], 
@@ -563,6 +563,7 @@ class AI {
             console.log("original move:", bestMove);
             bestMove = randomChoice(bestMoves); 
         }
+        // heuristic: common openings - bottom of board
         if (game.turn < 5 && game.pawnOfNotTurn.position.col === 4 && game.pawnOfNotTurn.position.row === 2 && Math.random() < 0.5) {
             const bestMoves = [
                 [null, [2, 3], null], 
@@ -636,7 +637,7 @@ class AI {
         return nextPositions;
     }
 
-    // get 2D array "next" to closest goal in the game
+    // get 2D array "next" to the closest goal in the game
     static get2DArrayPrevAndNextAndDistanceToGoalFor(pawn, game) {
         const t = this.getRandomShortestPathToGoal(pawn, game);
         const dist = t[0];
@@ -649,11 +650,11 @@ class AI {
 
     static chooseShortestPathNextPawnPosition(game) {
         let nextPosition = null;
-        // "if (AI.arePawnsAdjacent(game))"" part can deal with
+        // "if (AI.arePawnsAdjacent(game))" part can deal with
         // general case, not only adjacent pawns case.
-        // But, for not adjacent case, there is a more efficent way
+        // But, for not adjacent case, there is a more efficient way
         // to find next position. It is the "else" part.
-        // This impoves performece significantly.
+        // This improves performance significantly.
         if (AI.arePawnsAdjacent(game)) {
             const nextPositions = this.chooseShortestPathNextPawnPositionsThoroughly(game);
             nextPosition = randomChoice(nextPositions);
@@ -781,7 +782,7 @@ class AI {
     }
     
     static getRandomShortestPathToGoal(pawn, game) {
-        // This is one of bottle neck, so did inlining...
+        // This is one of the bottlenecks, so inlining populating these arrays...
         //const visited = create2DArrayInitializedTo(9, 9, false);
         //const dist = create2DArrayInitializedTo(9, 9, Infinity);
         //const prev = create2DArrayInitializedTo(9, 9, null);
@@ -935,12 +936,12 @@ class AI {
         return next;
     }
 
-    // Disturbing walls: (1) walls interrupt shortest paths of the pawn (2) walls near the pawn
+    // Disturbing walls: (1) walls to interrupt the shortest paths of the pawn (2) walls near the pawn
     static getValidNextWallsDisturbPathOf(pawn, game) {
         const validInterruptHorizontalWalls = create2DArrayInitializedTo(8, 8, false);
         const validInterruptVerticalWalls = create2DArrayInitializedTo(8, 8, false);
         
-        // add (1) walls interrupt shortest paths of the pawn
+        // add (1) walls to interrupt the shortest paths of the pawn
         const visited = create2DArrayInitializedTo(9, 9, false);
         const t = AI.getAllShortestPathsToEveryPosition(pawn, game);
         const dist = t[0];
@@ -960,7 +961,7 @@ class AI {
             if (prevs === null) {
                 // for debug
                 if (queue.length !== 0) {
-                    throw "some error occured...."
+                    throw "some error occurred...."
                 }
                 continue; // this can be "break;"
                 // because if condition holds ture only if current position is start position.
@@ -968,7 +969,7 @@ class AI {
             for (let i = 0; i < prevs.length; i++) {
                 let prevPosition = prevs[i];
                 const pawnMoveTuple = position.getDisplacementPawnMoveTupleFrom(prevPosition);
-                // mark valid walls which can interupt the pawn move
+                // mark valid walls which can interrupt the pawn move
                 if (pawnMoveTuple[0] === -1 && pawnMoveTuple[1] === 0) { // up
                     if (prevPosition.col < 8) {
                         validInterruptHorizontalWalls[prevPosition.row-1][prevPosition.col] = true;
