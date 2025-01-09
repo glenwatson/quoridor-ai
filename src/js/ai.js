@@ -1035,7 +1035,12 @@ class AI {
     }
 
 }
- 
+
+/**
+ * Returns the indices of all the minimum values
+ * @param arr the array to search
+ * @returns {Array<number>}
+ */
 function indicesOfMin(arr) {
     let min = Infinity;
     let indices = [];
@@ -1050,6 +1055,11 @@ function indicesOfMin(arr) {
     return indices;
 }
 
+/**
+ * Returns the indices of all the maximum values
+ * @param arr the array to search
+ * @returns {Array<number>}
+ */
 function indicesOfMax(arr) {
     let max = -Infinity;
     let indices = [];
