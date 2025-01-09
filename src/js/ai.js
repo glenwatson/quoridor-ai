@@ -649,7 +649,7 @@ class AI {
     }
 
     static chooseShortestPathNextPawnPosition(game) {
-        let nextPosition = null;
+        let nextPosition;
         // "if (AI.arePawnsAdjacent(game))" part can deal with
         // general case, not only adjacent pawns case.
         // But, for not adjacent case, there is a more efficient way
@@ -979,7 +979,8 @@ class AI {
                     }    
                 } else if (pawnMoveTuple[0] === 1 && pawnMoveTuple[1] === 0) { // down
                     if (prevPosition.col < 8) {
-                        validInterruptHorizontalWalls[prevPosition.row][prevPosition.col] = true;                   }
+                        validInterruptHorizontalWalls[prevPosition.row][prevPosition.col] = true;
+                    }
                     if (prevPosition.col > 0) {
                         validInterruptHorizontalWalls[prevPosition.row][prevPosition.col-1] = true;
                     }  
@@ -1071,7 +1072,7 @@ function indicesOfSemiMax(arr) {
     let max = -Infinity;
     let indices = [];
     for (let i = 0; i < arr.length; i++) {
-        if (arr[i] !== Infinity && arr[i] !== NaN && arr[i] > max) {
+        if (arr[i] !== Infinity && !isNaN(arr[i]) && arr[i] > max) {
             indices = [i];
             max = arr[i];
         } else if (arr[i] === max) {
