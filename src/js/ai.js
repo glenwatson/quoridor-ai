@@ -829,15 +829,13 @@ class AI {
         while (queue.length > 0) {
             let position = queue.shift();
             if (position.row === pawn.goalRow) {
-                const goalPosition = position;
-                return [dist, prev, goalPosition];
+                return [dist, prev, position];
             }
             for (let i = 0; i < pawnMoveTuples.length; i++) {
                 if (game.isOpenWay(position.row, position.col, pawnMoveTuples[i])) {
                     const nextPosition = position.newAddMove(pawnMoveTuples[i]);
                     if (!visited[nextPosition.row][nextPosition.col]) {
-                        const alt = dist[position.row][position.col] + 1;
-                        dist[nextPosition.row][nextPosition.col] = alt;
+                        dist[nextPosition.row][nextPosition.col] = dist[position.row][position.col] + 1;
                         prev[nextPosition.row][nextPosition.col] = position;
                         visited[nextPosition.row][nextPosition.col] = true;
                         queue.push(nextPosition);
@@ -873,8 +871,7 @@ class AI {
                 if (game.isOpenWay(position.row, position.col, pawnMoveTuples[i])) {
                     const nextPosition = position.newAddMove(pawnMoveTuples[i]);
                     if (!visited[nextPosition.row][nextPosition.col]) {
-                        const alt = dist[position.row][position.col] + 1;
-                        dist[nextPosition.row][nextPosition.col] = alt;
+                        dist[nextPosition.row][nextPosition.col] = dist[position.row][position.col] + 1;
                         visited[nextPosition.row][nextPosition.col] = true;
                         queue.push(nextPosition);
                     }
