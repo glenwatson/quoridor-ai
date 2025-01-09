@@ -65,67 +65,67 @@ Game.prototype.getArrOfValidNextPositionTuples = function() {
 }
 
 // get valid next horizontal walls that do not block all paths of either pawn.
-Game.prototype.getArrOfValidNoBlockNextHorizontalWallPositions = function() {
+Game.prototype.getArrOfValidNonBlockingNextHorizontalWallPositions = function() {
     const nextHorizontals = indicesOfValueIn2DArray(this.validNextWalls.horizontal, true);
-    const noBlockNextHorizontals = [];
+    const nonBlockingNextHorizontals = [];
     for (let i = 0; i < nextHorizontals.length; i++) {
         if (this.testIfExistPathsToGoalLinesAfterPlaceHorizontalWall(nextHorizontals[i][0], nextHorizontals[i][1])) {   
-            noBlockNextHorizontals.push(nextHorizontals[i]);
+            nonBlockingNextHorizontals.push(nextHorizontals[i]);
         }
     }
-    return noBlockNextHorizontals;
+    return nonBlockingNextHorizontals;
 };
 
-Game.prototype.getArrOfValidNoBlockNextVerticalWallPositions = function() {
+Game.prototype.getArrOfValidNonBlockingNextVerticalWallPositions = function() {
     const nextVerticals = indicesOfValueIn2DArray(this.validNextWalls.vertical, true);
-    const noBlockNextVerticals = [];
+    const nonBlockingNextVerticals = [];
     for (let i = 0; i < nextVerticals.length; i++) {
         if (this.testIfExistPathsToGoalLinesAfterPlaceVerticalWall(nextVerticals[i][0], nextVerticals[i][1])) {
-            noBlockNextVerticals.push(nextVerticals[i]);
+            nonBlockingNextVerticals.push(nextVerticals[i]);
         }
     }
-    return noBlockNextVerticals;
+    return nonBlockingNextVerticals;
 };
 
-Game.prototype.getArrOfProbableValidNoBlockNextHorizontalWallPositions = function() {
+Game.prototype.getArrOfProbableValidNonBlockingNextHorizontalWallPositions = function() {
     const nextHorizontals = indicesOfValueIn2DArray(this.probableValidNextWalls.horizontal, true);
-    const noBlockNextHorizontals = [];
+    const nonBlockingNextHorizontals = [];
     for (let i = 0; i < nextHorizontals.length; i++) {
         if (this.testIfExistPathsToGoalLinesAfterPlaceHorizontalWall(nextHorizontals[i][0], nextHorizontals[i][1])) {   
-            noBlockNextHorizontals.push(nextHorizontals[i]);
+            nonBlockingNextHorizontals.push(nextHorizontals[i]);
         }
     }
-    return noBlockNextHorizontals;
+    return nonBlockingNextHorizontals;
 };
 
-Game.prototype.getArrOfProbableValidNoBlockNextVerticalWallPositions = function() {
+Game.prototype.getArrOfProbableValidNonBlockingNextVerticalWallPositions = function() {
     const nextVerticals = indicesOfValueIn2DArray(this.probableValidNextWalls.vertical, true);
-    const noBlockNextVerticals = [];
+    const nonBlockingNextVerticals = [];
     for (let i = 0; i < nextVerticals.length; i++) {
         if (this.testIfExistPathsToGoalLinesAfterPlaceVerticalWall(nextVerticals[i][0], nextVerticals[i][1])) {
-            noBlockNextVerticals.push(nextVerticals[i]);
+            nonBlockingNextVerticals.push(nextVerticals[i]);
         }
     }
-    return noBlockNextVerticals;
+    return nonBlockingNextVerticals;
 };
 
-Game.prototype.getArrOfValidNoBlockNextWallsDisturbPathOf = function(pawn) {
+Game.prototype.getArrOfValidNonBlockingNextWallsDisturbPathOf = function(pawn) {
     const validNextWallsInterupt = AI.getValidNextWallsDisturbPathOf(pawn, this);
     const nextHorizontals = indicesOfValueIn2DArray(validNextWallsInterupt.horizontal, true);
-    const noBlockNextHorizontals = [];
+    const nonBlockingNextHorizontals = [];
     for (let i = 0; i < nextHorizontals.length; i++) {
         if (this.testIfExistPathsToGoalLinesAfterPlaceHorizontalWall(nextHorizontals[i][0], nextHorizontals[i][1])) {   
-            noBlockNextHorizontals.push(nextHorizontals[i]);
+            nonBlockingNextHorizontals.push(nextHorizontals[i]);
         }
     }
     const nextVerticals = indicesOfValueIn2DArray(validNextWallsInterupt.vertical, true);
-    const noBlockNextVerticals = [];
+    const nonBlockingNextVerticals = [];
     for (let i = 0; i < nextVerticals.length; i++) {
         if (this.testIfExistPathsToGoalLinesAfterPlaceVerticalWall(nextVerticals[i][0], nextVerticals[i][1])) {
-            noBlockNextVerticals.push(nextVerticals[i]);
+            nonBlockingNextVerticals.push(nextVerticals[i]);
         }
     }
-    return {arrOfHorizontal: noBlockNextHorizontals, arrOfVertical: noBlockNextVerticals};
+    return {arrOfHorizontal: nonBlockingNextHorizontals, arrOfVertical: nonBlockingNextVerticals};
 }
 
 /*
@@ -280,15 +280,15 @@ class MonteCarloTreeSearch {
                             currentNode.addChild(childNode);
                         }
                         if (simulationGame.pawnOfTurn.numberOfLeftWalls > 0) {
-                            const noBlockNextHorizontals = simulationGame.getArrOfProbableValidNoBlockNextHorizontalWallPositions();
-                            for (let i = 0; i < noBlockNextHorizontals.length; i++) { 
-                                move = [null, noBlockNextHorizontals[i], null];
+                            const nonBlockingNextHorizontals = simulationGame.getArrOfProbableValidNonBlockingNextHorizontalWallPositions();
+                            for (let i = 0; i < nonBlockingNextHorizontals.length; i++) { 
+                                move = [null, nonBlockingNextHorizontals[i], null];
                                 childNode = new MNode(move, currentNode, uctConst); 
                                 currentNode.addChild(childNode);
                             }
-                            const noBlockNextVerticals = simulationGame.getArrOfProbableValidNoBlockNextVerticalWallPositions();
-                            for (let i = 0; i < noBlockNextVerticals.length; i++) {
-                                move = [null, null, noBlockNextVerticals[i]];
+                            const nonBlockingNextVerticals = simulationGame.getArrOfProbableValidNonBlockingNextVerticalWallPositions();
+                            for (let i = 0; i < nonBlockingNextVerticals.length; i++) {
+                                move = [null, null, nonBlockingNextVerticals[i]];
                                 childNode = new MNode(move, currentNode, uctConst); 
                                 currentNode.addChild(childNode);
                             }
@@ -309,17 +309,17 @@ class MonteCarloTreeSearch {
                             // if opponent has no walls left,
                             // place walls only to interrupt the opponent's path,
                             // not to support my pawn.
-                            const noBlockNextWallsInterupt =
-                            simulationGame.getArrOfValidNoBlockNextWallsDisturbPathOf(simulationGame.pawnOfNotTurn);
-                            const noBlockNextHorizontalsInterupt = noBlockNextWallsInterupt.arrOfHorizontal;
-                            for (let i = 0; i < noBlockNextHorizontalsInterupt.length; i++) {
-                                move = [null, noBlockNextHorizontalsInterupt[i], null];
+                            const nonBlockingNextWallsInterupt =
+                            simulationGame.getArrOfValidNonBlockingNextWallsDisturbPathOf(simulationGame.pawnOfNotTurn);
+                            const nonBlockingNextHorizontalsInterupt = nonBlockingNextWallsInterupt.arrOfHorizontal;
+                            for (let i = 0; i < nonBlockingNextHorizontalsInterupt.length; i++) {
+                                move = [null, nonBlockingNextHorizontalsInterupt[i], null];
                                 childNode = new MNode(move, currentNode, uctConst);
                                 currentNode.addChild(childNode);
                             }
-                            const noBlockNextVerticalsInterupt = noBlockNextWallsInterupt.arrOfVertical;
-                            for (let i = 0; i < noBlockNextVerticalsInterupt.length; i++) {
-                                move = [null, null, noBlockNextVerticalsInterupt[i]];
+                            const nonBlockingNextVerticalsInterupt = nonBlockingNextWallsInterupt.arrOfVertical;
+                            for (let i = 0; i < nonBlockingNextVerticalsInterupt.length; i++) {
+                                move = [null, null, nonBlockingNextVerticalsInterupt[i]];
                                 childNode = new MNode(move, currentNode, uctConst);
                                 currentNode.addChild(childNode);
                             }
