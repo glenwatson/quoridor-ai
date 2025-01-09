@@ -110,7 +110,7 @@ Game.prototype.getArrOfProbableValidNonBlockingNextVerticalWallPositions = funct
 };
 
 Game.prototype.getArrOfValidNonBlockingNextWallsDisturbPathOf = function(pawn) {
-    const validNextWallsInterupt = AI.getValidNextWallsDisturbPathOf(pawn, this);
+    const validNextWallsInterupt = AI.getValidNextWallsThatDisturbPathOf(pawn, this);
     const nextHorizontals = indicesOfValueIn2DArray(validNextWallsInterupt.horizontal, true);
     const nonBlockingNextHorizontals = [];
     for (let i = 0; i < nextHorizontals.length; i++) {
@@ -933,8 +933,16 @@ class AI {
         return next;
     }
 
-    // Disturbing walls: (1) walls to interrupt the shortest paths of the pawn (2) walls near the pawn
-    static getValidNextWallsDisturbPathOf(pawn, game) {
+    /**
+     * Calculates walls that disturb a pawn
+     * A wall disturbs a pawn if it either:
+     * 1. interrupts the shortest paths of the pawn, or
+     * 2. is beside the pawn
+     * @param pawn
+     * @param game
+     * @returns {{horizontal: Array<Array<boolean>>, vertical: Array<Array<boolean>>}}
+     */
+    static getValidNextWallsThatDisturbPathOf(pawn, game) {
         const validInterruptHorizontalWalls = create2DArrayInitializedTo(8, 8, false);
         const validInterruptVerticalWalls = create2DArrayInitializedTo(8, 8, false);
         
@@ -1097,16 +1105,22 @@ function randomChoice(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
+/**
+ * Searches 2D array for a value
+ * @param arr2D the 2D array to search
+ * @param value value to search for
+ * @returns {Array<[number, number]>}
+ */
 function indicesOfValueIn2DArray(arr2D, value) {
-    let t = [];
+    let indexTuples = [];
     for (let i = 0; i < arr2D.length; i++) {
         for (let j = 0; j < arr2D[0].length; j++) {
             if (arr2D[i][j] === value) {
-                t.push([i, j]);
+                indexTuples.push([i, j]);
             }
         }
     }
-    return t;
+    return indexTuples;
 }
 
 /**
